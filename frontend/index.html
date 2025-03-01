@@ -5,70 +5,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document Scanner</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
+    <div id="app">
+        <!-- Authentication Section -->
+        <div id="auth-section" class="section">
+            <h2>Welcome to Document Scanner</h2>
+            <div id="auth-forms">
+                <div id="login-form" class="auth-form">
+                    <h3>Login</h3>
+                    <input type="text" id="login-username" placeholder="Username">
+                    <input type="password" id="login-password" placeholder="Password">
+                    <button onclick="login()">Login</button>
+                    <p>Don't have an account? <a href="#" onclick="toggleAuthForm()">Register</a></p>
+                </div>
+                
+                <div id="register-form" class="auth-form hidden">
+                    <h3>Register</h3>
+                    <input type="text" id="register-username" placeholder="Username">
+                    <input type="password" id="register-password" placeholder="Password">
+                    <button onclick="register()">Register</button>
+                    <p>Already have an account? <a href="#" onclick="toggleAuthForm()">Login</a></p>
+                </div>
+            </div>
+        </div>
 
-    <h2>Login</h2>
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <p id="loginMessage"></p>
+        <!-- Main Application Section (Hidden until logged in) -->
+        <div id="main-section" class="section hidden">
+            <header>
+                <h2>Document Scanner Dashboard</h2>
+                <div class="user-info">
+                    <span id="username-display"></span>
+                    <span id="credits-display"></span>
+                    <button onclick="logout()">Logout</button>
+                </div>
+            </header>
 
-    <!-- <h2>Upload a Document</h2>
-    <input type="file" id="fileInput">
-    <button onclick="uploadFile()">Upload</button>
-    <p id="message"></p> -->
+            <!-- Document Upload Section -->
+            <div class="upload-section">
+                <h3>Upload Document</h3>
+                <input type="file" id="document-upload" accept=".txt">
+                <button onclick="scanDocument()">Scan Document (1 Credit)</button>
+            </div>
 
-    <script>
+            <!-- Results Section -->
+            <div class="results-section">
+                <h3>Scan Results</h3>
+                <div id="scan-results"></div>
+            </div>
 
-        function login() {
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
+            <!-- Credit Request Section -->
+            <div class="credit-section">
+                <h3>Request Additional Credits</h3>
+                <button onclick="requestCredits()">Request Credits</button>
+            </div>
+        </div>
 
-            fetch("http://localhost:5000/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.token) {
-                        localStorage.setItem("token", data.token);
-                        document.getElementById("loginMessage").innerText = "Login successful!";
-                    } else {
-                        document.getElementById("loginMessage").innerText = data.error;
-                    }
-                })
-                .catch(error => console.error("Error:", error));
-        }
+        <!-- Admin Section (Hidden unless admin) -->
+        <div id="admin-section" class="section hidden">
+            <h2>Admin Dashboard</h2>
+            <div class="credit-requests">
+                <h3>Pending Credit Requests</h3>
+                <div id="credit-requests-list"></div>
+            </div>
+            <div class="analytics">
+                <h3>System Analytics</h3>
+                <div id="analytics-data"></div>
+            </div>
+        </div>
+    </div>
 
-        // function uploadFile() {
-        //     const fileInput = document.getElementById("fileInput");
-        //     const file = fileInput.files[0];
-
-        //     if (!file) {
-        //         alert("Please select a file.");
-        //         return;
-        //     }
-
-        //     const formData = new FormData();
-        //     formData.append("document", file);
-
-        //     fetch("http://localhost:5000/upload", {
-        //         method: "POST",
-        //         body: formData
-        //     })
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             document.getElementById("message").innerText = data.message;
-        //         })
-        //         .catch(error => {
-        //             console.error("Error uploading file:", error);
-        //         });
-        // }
-    </script>
-
+    <script src="js/auth.js"></script>
+    <script src="js/scanner.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/admin.js"></script>
 </body>
 
 </html>
