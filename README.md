@@ -10,17 +10,19 @@ A web-based document scanning application that allows users to scan and compare 
 - Admin dashboard for managing credit requests
 - Real-time analytics
 
-## Prerequisites
+## Local Development
+
+### Prerequisites
 
 - Node.js v20.11.1 or higher
 - SQLite3
 - Modern web browser
 
-## Installation
+### Installation
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/divyamehrotra/doc-scanner
 cd doc-scanner
 ```
 
@@ -35,7 +37,7 @@ cd ../frontend
 npm install
 ```
 
-## Configuration
+### Configuration
 
 1. The backend server will automatically:
    - Initialize the SQLite database
@@ -51,7 +53,7 @@ npm install
      - Username: `user2`
      - Password: `pass2`
 
-## Running the Application
+### Running Locally
 
 1. Start the backend server:
 ```bash
@@ -71,38 +73,77 @@ The frontend will run on port 8000.
    - Frontend: http://localhost:8000
    - Backend API: http://localhost:5000 (or the port shown in console)
 
-## Usage
 
-1. **User Functions:**
-   - Log in with your credentials
-   - View your credit balance
-   - Upload and scan documents
-   - Request additional credits when needed
+### Security Considerations
 
-2. **Admin Functions:**
-   - Access the admin dashboard
-   - View all credit requests
-   - Approve or deny credit requests
-   - Monitor system analytics
+1. **Environment Variables:**
+   - Never commit `.env` files to version control
+   - Use strong, unique JWT secrets in production
+   - Regularly rotate secrets and credentials
+
+2. **Database:**
+   - Regularly backup the SQLite database
+   - Consider using a more robust database for high traffic
+   - Set appropriate file permissions
+
+3. **File Uploads:**
+   - Limit file sizes and types
+   - Regularly clean up old uploads
+   - Use virus scanning when possible
+
+4. **Authentication:**
+   - Keep JWT expiration times reasonable
+   - Implement rate limiting
+   - Use secure password policies
+
+### Monitoring
+
+1. Use PM2 for process monitoring:
+```bash
+pm2 monit
+pm2 logs
+```
+
+2. Monitor server resources:
+```bash
+pm2 install pm2-server-monit
+```
+
+3. Set up logging:
+```bash
+pm2 install pm2-logrotate
+```
+
+### Backup Strategy
+
+1. Database backups:
+```bash
+# Create a backup script
+#!/bin/bash
+backup_dir="/path/to/backups"
+timestamp=$(date +%Y%m%d_%H%M%S)
+sqlite3 /path/to/your/database.db ".backup '${backup_dir}/backup_${timestamp}.db'"
+```
+
+2. Schedule regular backups:
+```bash
+# Add to crontab
+0 0 * * * /path/to/backup-script.sh
+```
 
 ## Troubleshooting
 
 1. If you see "Port in use" messages:
-   - The backend will automatically try the next available port
-   - Note the final port number shown in the console
+   - Check running processes: `pm2 list`
+   - Use different ports in the configuration
+   - Check for other services using the ports
 
 2. If you get "Unauthorized" errors:
-   - Clear your browser cache
-   - Try logging out and logging back in
-   - Ensure you're using the correct credentials
+   - Check JWT secret configuration
+   - Verify API URL configuration
+   - Clear browser cache and cookies
 
 3. For database issues:
-   - The system will automatically initialize the database
-   - Admin and user2 accounts are created automatically
-
-## Security Notes
-
-- Never expose your JWT tokens
-- Keep your admin credentials secure
-- The system uses bcrypt for password hashing
-- All API endpoints are protected with authentication
+   - Check file permissions
+   - Verify database path
+   - Check backup integrity
