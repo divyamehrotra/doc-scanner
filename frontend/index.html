@@ -1,43 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document Scanner</title>
 </head>
+
 <body>
 
-    <h2>Upload a Document</h2>
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p id="loginMessage"></p>
+
+    <!-- <h2>Upload a Document</h2>
     <input type="file" id="fileInput">
     <button onclick="uploadFile()">Upload</button>
-    <p id="message"></p>
+    <p id="message"></p> -->
 
     <script>
-        function uploadFile() {
-            const fileInput = document.getElementById("fileInput");
-            const file = fileInput.files[0];
 
-            if (!file) {
-                alert("Please select a file.");
-                return;
-            }
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
 
-            const formData = new FormData();
-            formData.append("document", file);
-
-            fetch("http://localhost:5000/upload", {
+            fetch("http://localhost:5000/auth/login", {
                 method: "POST",
-                body: formData
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
             })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("message").innerText = data.message;
-            })
-            .catch(error => {
-                console.error("Error uploading file:", error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.token) {
+                        localStorage.setItem("token", data.token);
+                        document.getElementById("loginMessage").innerText = "Login successful!";
+                    } else {
+                        document.getElementById("loginMessage").innerText = data.error;
+                    }
+                })
+                .catch(error => console.error("Error:", error));
         }
+
+        // function uploadFile() {
+        //     const fileInput = document.getElementById("fileInput");
+        //     const file = fileInput.files[0];
+
+        //     if (!file) {
+        //         alert("Please select a file.");
+        //         return;
+        //     }
+
+        //     const formData = new FormData();
+        //     formData.append("document", file);
+
+        //     fetch("http://localhost:5000/upload", {
+        //         method: "POST",
+        //         body: formData
+        //     })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             document.getElementById("message").innerText = data.message;
+        //         })
+        //         .catch(error => {
+        //             console.error("Error uploading file:", error);
+        //         });
+        // }
     </script>
 
 </body>
+
 </html>
