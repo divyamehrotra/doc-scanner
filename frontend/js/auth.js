@@ -6,7 +6,7 @@ let currentUser = null;
 let authToken = localStorage.getItem('authToken');
 
 // UI Elements
-let authSection, mainSection, adminSection, loginForm, registerForm, usernameDisplay, creditsDisplay;
+let authSection, mainSection, adminSection, loginForm, registerForm, usernameDisplay, adminUsernameDisplay, creditsDisplay;
 
 // Initialize UI Elements
 function initializeUIElements() {
@@ -16,6 +16,7 @@ function initializeUIElements() {
     loginForm = document.getElementById('login-form');
     registerForm = document.getElementById('register-form');
     usernameDisplay = document.getElementById('username-display');
+    adminUsernameDisplay = document.getElementById('admin-username-display');
     creditsDisplay = document.getElementById('credits-display');
 
     if (!authSection || !mainSection || !adminSection || !loginForm || !registerForm) {
@@ -156,13 +157,15 @@ function updateUI() {
         if (currentUser.is_admin) {
             mainSection.classList.add('hidden');
             adminSection.classList.remove('hidden');
+            if (adminUsernameDisplay) {
+                adminUsernameDisplay.textContent = `Welcome, ${currentUser.username}!`;
+            }
         } else {
             mainSection.classList.remove('hidden');
             adminSection.classList.add('hidden');
-        }
-        
-        if (usernameDisplay) {
-            usernameDisplay.textContent = `Welcome, ${currentUser.username}!`;
+            if (usernameDisplay) {
+                usernameDisplay.textContent = `Welcome, ${currentUser.username}!`;
+            }
         }
     } else {
         authSection.classList.remove('hidden');

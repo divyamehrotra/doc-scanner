@@ -106,7 +106,3 @@ The frontend will run on port 8000.
 - Keep your admin credentials secure
 - The system uses bcrypt for password hashing
 - All API endpoints are protected with authentication
-
-## License
-
-[Add your license information here]

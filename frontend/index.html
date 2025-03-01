@@ -65,7 +65,13 @@
 
         <!-- Admin Section (Hidden unless admin) -->
         <div id="admin-section" class="section hidden">
-            <h2>Admin Dashboard</h2>
+            <header>
+                <h2>Admin Dashboard</h2>
+                <div class="user-info">
+                    <span id="admin-username-display"></span>
+                    <button onclick="logout()">Logout</button>
+                </div>
+            </header>
             <div class="credit-requests">
                 <h3>Pending Credit Requests</h3>
                 <div id="credit-requests-list"></div>
